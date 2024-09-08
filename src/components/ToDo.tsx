@@ -9,16 +9,21 @@ const ToDo = ({ text, category, id }: IToDo) => {
   //   console.log(newCategory);
   // };
   const setToDos = useSetRecoilState(toDoState);
+
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
     } = event;
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      const oldToDo = oldToDos[targetIndex];
-      const newToDo = { text, id, category: name };
+      // const oldToDo = oldToDos[targetIndex];
+      const newToDo = { text, id, category: name as any };
       console.log("replace the to do in the index");
-      return oldToDos;
+      return [
+        ...oldToDos.slice(0, targetIndex),
+        newToDo,
+        ...oldToDos.slice(targetIndex + 1),
+      ];
     });
   };
 
@@ -26,7 +31,7 @@ const ToDo = ({ text, category, id }: IToDo) => {
     <li>
       <span>{text}</span>
       {category !== "DOING" && (
-        <button name="Doing" onClick={onClick}>
+        <button name="DOING" onClick={onClick}>
           Doing
         </button>
       )}
